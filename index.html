@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Borang Kehadiran</title>
+</head>
+<body>
+  <h2>Borang Kehadiran</h2>
+  <form id="attendanceForm">
+    <label>Nama:</label><br>
+    <input type="text" name="nama" required><br><br>
+
+    <label>Unit:</label><br>
+    <input type="text" name="unit" required><br><br>
+
+    <label>Status Kehadiran:</label><br>
+    <select name="status" required>
+      <option value="Hadir">Hadir</option>
+      <option value="Lewat">Lewat</option>
+      <option value="Tidak Hadir">Tidak Hadir</option>
+    </select><br><br>
+
+    <label>Catatan (jika ada):</label><br>
+    <textarea name="catatan" rows="3" cols="30"></textarea><br><br>
+
+    <button type="submit">Hantar Kehadiran</button>
+    <p id="result"></p>
+  </form>
+
+  <script>
+    const form = document.getElementById('attendanceForm');
+    const result = document.getElementById('result');
+
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+      const jsonData = {};
+      formData.forEach((value, key) => jsonData[key] = value);
+
+      try {
+        const response = await fetch('1qSGnedSRKD9nxGHcnNXbmdCDoPxD9zcYhY2obKRDOb0Mm-wCqcDrV_u9', {
+          method: 'POST',
+          body: JSON.stringify(jsonData),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        const text = await response.text();
+        result.textContent = "✔️ Kehadiran berjaya dihantar!";
+        form.reset();
+      } catch (error) {
+        result.textContent = "❌ Ralat semasa menghantar. Cuba lagi.";
+      }
+    });
+  </script>
+</body>
+</html>
